@@ -9,7 +9,7 @@ Zadanie 1: Dodaj do centralnej części siatki panel do wyboru daty (klasa DateP
 siatki przycisk submit. Przycisk ma być nieaktywny (metoda setDisable), dopóki nie wybierzemy daty dzisiejszej (26.05.2020).
 Aktywny przycisk powinien zamykać okno aplikacji.
 
-** UWAGA: Data wybierana z panelu jest zmienną typu LocalDate!
+# UWAGA: Data wybierana z panelu jest zmienną typu LocalDate!
 
 ##### Zadania do wykonania w klasie Zadanie2
 
@@ -26,7 +26,7 @@ W centralnym punkcie siatki znajduje sie koło progresu.
 Spraw, aby po czterech kliknięciach górnego przycisku pasek był w pełni naładowany.
 Po naładowaniu należy sprawić, że w centralnej części siatki pojawi sie przycisk z napisem "GG WP"
 A górny przycisk zniknie
-** UWAGA: Po każdym kliknięciu w górny przycisk powinno być widać rosnący progres!
+# UWAGA: Po każdym kliknięciu w górny przycisk powinno być widać rosnący progres!
 
 ## Zadanie no. 4
 
