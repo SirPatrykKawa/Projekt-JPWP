@@ -5,4 +5,4 @@ Projekt zaliczeniowy z przedmiotu Języki Programowania Wysokiego Poziomu. Repoz
 * Branch JavaFX -> Front-End aplikacji
 * Branch Python -> Back-End aplikacji
 * Branch Connector -> Klasa łącząca Front-End z Back-Endem
-* Branch Master -> Treści zadań + prezentacja
+* Branch Master -> Prezentacja
