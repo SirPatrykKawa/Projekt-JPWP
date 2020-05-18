@@ -1,0 +1,31 @@
+Pytania Kahoot!
+
+1. Algorytm AES jest następcą którego z niżej podanych algorytmów?
+- DES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- PUB
+- SHA
+- CRC
+
+2. Wywołanie której/których funkcji na obiekcie siatki pozwoli na zapełnienie wielu jej pół NA RAZ?
+- addAll()
+- appendAll()
+- addAll() i getChildren() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- appendAll() i getChildren()
+
+3. Zmiane koloru tekstu w etykiecie umożliwi funkcja:
+- setFont()
+- setFontColor()
+- setColor()
+- setTextFill() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+4. Zaznacz wszystkie prawdziwe:
+- wywołanie funkcji launch() w funkcji main uruchomi program !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- obiekty klasy VBox i HBox to przykłady kontenerów !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- JavaFX nie obsługuje wyrażeń lambda
+- Biblioteka Swing jest następcą JavaFX
+
+5. Wybierz poprawną strukturę aplikacji JavaFX:
+- Scene -> Stage -> Controls
+- Controls -> Scene -> Stage
+- Stage -> Scene -> Controls !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- Scene -> Controls -> Stage
