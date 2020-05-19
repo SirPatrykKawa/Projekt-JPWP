@@ -17,7 +17,7 @@ Aktywny przycisk powinien zamykać okno aplikacji.
 
 Nałóż opóźnienie wynoszące trzy sekundy, które uruchomi się po kliknięciu dolnego przycisku.
 Po upływie trzech sekund dolny przycisk zniknie, a pojawi sie górny.
-Aby nałożyć opóźnienie należy stworzyć obiekt klasy PauseTransitionm który w konstruktorze jako argument
+Aby nałożyć opóźnienie należy stworzyć obiekt klasy PauseTransition, który w konstruktorze jako argument.
 Przyjmie czas trzy sekund (obiekt klasy Duration) 
 
 ## Zadanie no. 3
@@ -25,7 +25,7 @@ Przyjmie czas trzy sekund (obiekt klasy Duration)
 W centralnym punkcie siatki znajduje sie koło progresu.
 Spraw, aby po czterech kliknięciach górnego przycisku pasek był w pełni naładowany.
 Po naładowaniu należy sprawić, że w centralnej części siatki pojawi sie przycisk z napisem "GG WP"
-A górny przycisk zniknie
+A górny przycisk zniknie.
 * UWAGA: Po każdym kliknięciu w górny przycisk powinno być widać rosnący progres!
 
 ## Zadanie no. 4
