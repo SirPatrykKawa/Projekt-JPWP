@@ -1,0 +1,30 @@
+{
+    "1": {
+        "name": "One World Trade Center",
+        "floors": "104",
+        "built": "2014",
+        "town": "New York City",
+        "country": "United States of America"
+    },
+    "2": {
+        "name": "Burj Khalifa",
+        "floors": "163",
+        "built": "2010",
+        "town": "Dubai",
+        "country": "United Arabic Emirates"
+    },
+    "3": {
+        "name": "Heron Tower",
+        "floors": "50",
+        "built": "2011",
+        "town": "London",
+        "country": "England"
+    },
+    "4": {
+        "name": "Willis Tower",
+        "floors": "108",
+        "built": "1974",
+        "town": "Chicago",
+        "country": "United States of America"
+    }
+}

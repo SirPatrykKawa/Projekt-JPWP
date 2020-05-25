@@ -1,0 +1,10 @@
+t1:
+  - mongo "mongodb+srv://mrpass-ssbep.mongodb.net/<database>" --username <username>
+  - client = pymongo.MongoClient("mongodb+srv://<username>:<password>@mrpass-ssbep.mongodb.net/<database>?retryWrites=true&w=majority")
+    db = client.<database>
+t2:
+  - testPOST: "http://127.0.0.1:9999/local?name=Palace%20of%20Culture%andScience&floors=42&built=1955&town=Warsaw&country=Poland"
+  - testPOST(/send): "http://127.0.0.1:9999/send?message=Hello%21%20This%20message%20is%20sent%20through%20POST%20method&author=Unknown"
+  - testGET: "http://127.0.0.1:9999/local/3"
+  - testPUT: "http://127.0.0.1:9999/local/1?field=country&new_value=USA"
+  - testDELETE: "http://127.0.0.1:9999/local/2"

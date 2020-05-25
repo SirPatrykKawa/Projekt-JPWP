@@ -19,8 +19,8 @@ unpad = ...
 
 # TODO: Function below.
 # The harder way is to use PBDKF2 function, but also the more secure way. If you will use it, you need to have salt.
-# As salt use phrase: "Salty_MrPass_Salt"
-def get_private_key(password):
+# As salt use phrase: salt = b"Salty_MrPass_So_Salty"
+def get_priv_key(password):
     """
     Function to generate AES encryption key
     :param password:

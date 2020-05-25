@@ -29,3 +29,49 @@ Pytania Kahoot!
 - Controls -> Scene -> Stage
 - Stage -> Scene -> Controls !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 - Scene -> Controls -> Stage
+
+6. Jaki format zapisu danych stosuje MongoDB:
+- json
+- bson !!!!!!!!!!!!!
+- mson
+- gson
+
+7. Jak przy pomocy pymongo wybrać z bazy danych(database) kolekcję('moja_kolekcja'):
+- collection = database(moja_kolekcja)
+- collection = database('moja_kolekcja')
+- collection = database.moja_kolekcja       !!!!!!!!!!!!!!!
+- collection = database['moja_kolekcja']    !!!!!!!!!!!!!!!
+
+8. Jakich metod protokołu HTTP możesz użyć projektując REST API:
+- PUT       !!!!!!!!!!!!!!!!!!!!!!!!!!
+- TAIL
+- HEAD      !!!!!!!!!!!!!!!!!!!!!!!!!!
+- DELETE    !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+9. Jak przy pomocy frameworka Flask przypisać ścieżkę URI '/send/msg' do funkcji send(): 
+- application.route('/send/msg', method='post') !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def send():
+        ...
+- application.path('/send/msg', method='post')
+    def send():
+        ...
+- application.add_resource(send, '/send/msg')
+- application.add_resource(send, '/', 'send', '/', 'msg')
+
+10. Z ilu bajtów składa się blok AES:
+- 64
+- 256
+- 16 !!!!!!!!!!!!!!!!!!!!!
+- 128
+
+11. MongoDB to baza danych:
+- relacyjna
+- NoSQL         !!!!!!!!!!!!!!!!!
+- nierelacyjna  !!!!!!!!!!!!!!!!!
+- SQL
+
+12. Które tryby szyfrowania AES rzeczywiście istnieją:
+- EAX   !!!!!!!!!!!!
+- CBC   !!!!!!!!!!!!
+- CTF
+- CTR   !!!!!!!!!!!!
