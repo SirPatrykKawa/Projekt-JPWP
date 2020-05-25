@@ -13,8 +13,8 @@ import json
 
 # TODO: Use !__lambda expressions__! to make pad() and unpad() functions
 BLOCK_SIZE = 16
-pad = ...
-unpad = ...
+pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
+unpad = lambda s: s[:-ord(s[len(s) - 1:])]
 
 
 # TODO: Function below.
@@ -26,7 +26,14 @@ def get_priv_key(password):
     :param password:
     :return:
     """
-    pass
+    func = 'harder'
+    if func == 'harder':
+        salt = b"application for securing json"
+        kdf = PBKDF2(password, salt, 64, 1000)
+        key = kdf[:32]
+        return key
+    elif func == 'easier':
+        return hashlib.sha256(password)
 
 
 # TODO: Function below. Remember to fill the padding, so that blocks are full
@@ -37,7 +44,11 @@ def encrypt(raw_data, password):
     :param password:
     :return: Encrypted data 
     """
-    pass
+    private_key = get_priv_key(password)
+    raw = pad(raw_data)
+    iv = Random.new().read(AES.block_size)
+    cipher = AES.new(private_key, AES.MODE_CBC, iv)
+    return base64.b64encode(iv + cipher.encrypt(raw.encode('utf-8')))
 
 
 # TODO: Function below. Remember to unpad decryprted data
@@ -48,7 +59,11 @@ def decrypt(encrypted_data, password):
     :param password:
     :return:
     """
-    pass
+    private_key = get_priv_key(password)
+    enc = base64.b64decode(encrypted_data)
+    iv = enc[:16]
+    cipher = AES.new(private_key, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(enc[16:]))
 
 
 ############################################################
