@@ -38,6 +38,10 @@ import org.apache.hc.core5.net.URIBuilder;
  */
 public class ApiConnector {
 
+    //-------------------------------------------------------------------------------------------------//
+    //                                            CODE_AREA                                            //
+    //-------------------------------------------------------------------------------------------------//
+
     /**
      * Just default constructor.
      */
@@ -73,9 +77,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(getLogin);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("LOGIN success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isLoginTrue = true;
                 }
             } finally {
@@ -108,9 +111,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(synchronise);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("SYNC success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isSynchronised = true;
                 }
             } finally {
@@ -161,9 +163,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(setupSet);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("SETUP success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isSet = true;
                 }
             } finally {
@@ -245,9 +246,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(setupUpdate);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("SETUP_CHANGE success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isChanged = true;
                 }
             } finally {
@@ -282,7 +282,7 @@ public class ApiConnector {
                     .setScheme("http")
                     .setHost("127.0.0.1")
                     .setPort(12715)
-                    .setPath("/db/" + collectionName)
+                    .setPath("/db/" + collectionName + "/add")
                     .setParameters(parameters)
                     .build();
             HttpPost recordAdd = new HttpPost(uri);
@@ -290,10 +290,15 @@ public class ApiConnector {
 
             try {
                 HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("REC_ADD success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isAdded = true;
                 }
+
+                /*Scanner sc = new Scanner(entity.getContent());
+                if (sc.nextLine().equals("REC_ADD success")) {
+                    isAdded = true;
+                }*/
             } finally {
                 response.close();
             }
@@ -318,6 +323,13 @@ public class ApiConnector {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HashMap<String, String> data = new HashMap<>();
             String requestPath = "/db/" + collectionName + "/" + criteria + "/" + value;
+
+            /*
+            * Criteria:
+            *   "id"
+            *   "name"
+            *   "url"
+            */
 
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -355,7 +367,8 @@ public class ApiConnector {
      * Method to update a record in local database
      *
      * @param collectionName name of the collection
-     * @param id id of the document
+     * @param criteria criteria of choice of the document
+     * @param value value to choose by the document
      * @param last_modified time of the modification
      * @param field field to change
      * @param new_val new of the field
@@ -365,10 +378,16 @@ public class ApiConnector {
      * @throws IOException
      * @throws URISyntaxException
      */
-    public boolean updateRecord(String collectionName, String id, String last_modified, String field, String new_val) throws IOException, URISyntaxException {
+    public boolean updateRecord(String collectionName, String criteria, String value, String last_modified, String field, String new_val) throws IOException, URISyntaxException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             boolean isUpdated = false;
-            String requestPath = "/db/" + collectionName + "/" + id;
+            String requestPath = "/db/" + collectionName + "/" + criteria + "/" + value;
+
+            /*
+             * Criteria:
+             *   "id"
+             *   "name"
+             */
 
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -383,9 +402,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(recordUpdate);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("REC_UPDATE success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isUpdated = true;
                 }
             } finally {
@@ -400,17 +418,24 @@ public class ApiConnector {
      * Method to delete Record from a local database
      *
      * @param collectionName name of the collection
-     * @param id id of the document
+     * @param criteria criteria of choice of the document
+     * @param value value to choose by the document
      *
      * @return boolean
      *
      * @throws IOException
      * @throws URISyntaxException
      */
-    public boolean deleteRecord(String collectionName, String id) throws IOException, URISyntaxException {
+    public boolean deleteRecord(String collectionName, String criteria, String value) throws IOException, URISyntaxException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             boolean isDeleted = false;
-            String requestPath = "/db/" + collectionName + "/" + id;
+            String requestPath = "/db/" + collectionName + "/" + criteria + "/" + value;
+
+            /*
+             * Criteria:
+             *   "id"
+             *   "name"
+             */
 
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -422,9 +447,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(recordDel);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("REC_DEL success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isDeleted = true;
                 }
             } finally {
@@ -466,9 +490,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(recordAdd);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("NOTE_ADD success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isAdded = true;
                 }
             } finally {
@@ -489,7 +512,7 @@ public class ApiConnector {
      * @throws IOException
      * @throws URISyntaxException
      */
-    public HashMap<String, String> getRecord(Integer number) throws IOException, URISyntaxException {
+    public HashMap<String, String> getNote(Integer number) throws IOException, URISyntaxException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HashMap<String, String> data = null;
 
@@ -554,9 +577,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(recordUpdate);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("NOTE_UPDATE success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isUpdated = true;
                 }
             } finally {
@@ -591,9 +613,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(recordDel);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("NOTE_DEL success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isDeleted = true;
                 }
             } finally {
@@ -629,9 +650,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(collectionDel);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("COLL_DEL success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isDeleted = true;
                 }
             } finally {
@@ -715,9 +735,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(testGet);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("TEST success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isSuccess = true;
                 }
             } finally {
@@ -803,9 +822,8 @@ public class ApiConnector {
             CloseableHttpResponse response = client.execute(testPost);
 
             try {
-                HttpEntity entity = response.getEntity();
-                Scanner sc = new Scanner(entity.getContent());
-                if (sc.nextLine().equals("TEST_JSON success")) {
+                int code = response.getCode();
+                if (code >= 200 && code < 300) {
                     isPassed = true;
                 }
             } finally {
@@ -887,6 +905,22 @@ public class ApiConnector {
             System.out.println(">\tJSON_LIST_TEST_GET passed\n");
         } else {
             System.out.println("Sorry, sth went wrong.., but with Json it's more complicated.. especially with Arrays\n");
+        }
+        String coll = "coll1";
+        HashMap<String, String> map = new HashMap<>();
+        map.put("name", "hej");
+        map.put("login", "QQ");
+        map.put("password", "WW");
+        map.put("url", "EE");
+        map.put("expires", "false");
+        map.put("expires_when", "2020-10-14-13:00:00");
+        map.put("description", "QQQQQ");
+        map.put("created_when", "2020-03-19-13:00:00");
+        map.put("last_modified", "2020-03-18-13:00:00");
+        if (api.addRecord(coll, map)) {
+            System.out.print(">\tSUCCESS");
+        } else {
+            System.out.print(">\tFAILURE");
         }
     }
 }
