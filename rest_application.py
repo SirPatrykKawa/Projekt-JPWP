@@ -98,22 +98,6 @@ class Setup(Resource):
             return Response('SETUP_CHANGE failure', mimetype='text/html')
 
 
-class GetRecord(Resource):
-    def get(self, coll, criteria, value):
-        """
-        Fetch record from database
-        :return:
-        """
-        if criteria == 'id':
-            return jsonify(lQ.get_document_by_id(coll, value))
-        elif criteria == 'name':
-            return jsonify(lQ.get_document_by_name(coll, value))
-        elif criteria == 'url':
-            return jsonify(lQ.get_document_by_url(coll, value))
-        else:
-            return Response('REC_FETCH failure', mimetype='text/html')
-
-
 class AddRecord(Resource):
     def post(self, coll):
         """
@@ -124,7 +108,7 @@ class AddRecord(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, case_sensitive=True)
         parser.add_argument('login', type=str, case_sensitive=True)
-        parser.add_argument('passord', type=str, case_sensitive=True)
+        parser.add_argument('password', type=str, case_sensitive=True)
         parser.add_argument('url', type=str, case_sensitive=True)
         parser.add_argument('expires', type=str)
         parser.add_argument('expires_when', type=str)
@@ -141,7 +125,21 @@ class AddRecord(Resource):
 
 
 class ManageRecord(Resource):
-    def put(self, coll, id):
+    def get(self, coll, crit, val):
+        """
+        Fetch record from database
+        :return:
+        """
+        if crit == 'id':
+            return jsonify(lQ.get_document_by_id(coll, val))
+        elif crit == 'name':
+            return jsonify(lQ.get_document_by_name(coll, val))
+        elif crit == 'url':
+            return jsonify(lQ.get_document_by_url(coll, val))
+        else:
+            return Response('REC_FETCH failure', mimetype='text/html')
+
+    def put(self, coll, crit, val):
         """
         Uodate record in a local database
         :param coll:
@@ -155,24 +153,37 @@ class ManageRecord(Resource):
         args = parser.parse_args()
 
         data = {'last_modified': args['last_modified'], args['position_to_change']: args['new_value'] }
-
-        if lQ.update_document(coll, id, data):
-            return Response('REC_UPDATE success', mimetype='text/html')
+        
+        if crit == 'name':
+            if lQ.update_document_by_name(coll, val, data):
+                return Response('REC_UPDATE success', mimetype='text/html')
+            else:
+                return Response('REC_UPDATE failure', mimetype='text/html')
         else:
-            return Response('REC_UPDATE failure', mimetype='text/html')
+            if lQ.update_document_by_id(coll, val, data):
+                return Response('REC_UPDATE success', mimetype='text/html')
+            else:
+                return Response('REC_UPDATE failure', mimetype='text/html')
 
-    def delete(self, coll, id):
+
+    def delete(self, coll, crit, val):
         """
         Delete a record from a local database
         :param coll:
         :param id:
         :return:
         """
-        if lQ.remove_document(coll, id):
-            return Response('REC_DEL success', mimetype='text/html')
-        else: 
-            return Response('REC_DEL failure', mimetype='text/html')
-
+        if crit == 'name':
+            if lQ.remove_document_by_name(coll, val):
+                return Response('REC_DEL success', mimetype='text/html')
+            else: 
+                return Response('REC_DEL failure', mimetype='text/html')
+        else:
+            if lQ.remove_document_by_id(coll, val):
+                return Response('REC_DEL success', mimetype='text/html')
+            else: 
+                return Response('REC_DEL failure', mimetype='text/html')
+        
 
 class ManageCollections(Resource):
     def get(self, coll):
@@ -183,7 +194,7 @@ class ManageCollections(Resource):
         """
         return jsonify(lQ.get_collection(coll))
 
-    def delete(self, coll):
+    def delete(self, coll, crit, val):
         """
         Delete a full collection from local database
         :param coll:
@@ -202,7 +213,7 @@ class ManageNotes(Resource):
         :param number:
         :return:
         """
-        return lQ.get_note(number)
+        return lQ.get_note('notes', number)
     
     def post(self, number):
         """
@@ -237,7 +248,7 @@ class ManageNotes(Resource):
 
         data = {'last_modified': args['last_modified'], args['position_to_change']: args['new_value'] }
 
-        if lQ.update_document('notes', number, data):
+        if lQ.update_note('notes', number, data):
             return Response('NOTE_UPDATE success', mimetype='text/html')
         else:
             return Response('NOTE_UPDATE failure', mimetype='text/html')
@@ -248,7 +259,7 @@ class ManageNotes(Resource):
         :param number:
         :return:
         """
-        if lQ.remove_document('notes', number):
+        if lQ.remove_note('notes', number):
             return Response('NOTE_DEL success', mimetype='text/html')
         else: 
             return Response('NOTE_DEL failure', mimetype='text/html')
@@ -312,9 +323,8 @@ api.add_resource(LogIn, '/login')
 api.add_resource(Synchronise, '/sync')
 api.add_resource(Setup, '/setup')
 
-api.add_resource(GetRecord, '/db/<string:coll>/<string:criteria>/<string:value>')
 api.add_resource(AddRecord, '/db/<string:coll>/add')
-api.add_resource(ManageRecord, '/db/<string:coll>/<id>')
+api.add_resource(ManageRecord, '/db/<string:coll>/<string:crit>/<string:val>')
 
 api.add_resource(ManageCollections, '/db/<string:coll>')
 api.add_resource(ManageNotes, '/db/notes/<int:number>')

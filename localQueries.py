@@ -11,9 +11,11 @@ with open("dbsettings.json", 'r') as fin:
 
 path_local_db = ''
 if os.name == 'posix':
-    path_local_db = Path.PurePosixPath(settings['local_db_path']).joinpath(Path.PurePosixPath(settings['local_db_name']))
+    path_local_db = Path.PurePosixPath(settings['local_db_path']).joinpath(
+        Path.PurePosixPath(settings['local_db_name']))
 elif os.name == 'nt':
-    path_local_db = Path.PureWindowsPath(settings['local_db_path']).joinpath(Path.PureWindowsPath(settings['local_db_name']))
+    path_local_db = Path.PureWindowsPath(settings['local_db_path']).joinpath(
+        Path.PureWindowsPath(settings['local_db_name']))
 
 
 def local_read():
@@ -44,27 +46,19 @@ def add_document(coll, doc_id, data):
     :param doc_id:
     :param data:
     """
-    database = local_read()
+    try:
+        database = local_read()
 
-    if coll not in list(database.keys()):
-        add_collection(coll)
+        if coll not in list(database.keys()):
+            database[coll] = []
 
-    data['_id'] = doc_id
-    database[coll].append(data)
+        data['_id'] = doc_id
+        database[coll].append(data)
 
-    local_write(database)
-
-
-def add_collection(coll):
-    """
-    Get collection from local database
-    :param coll:
-    """
-    database = local_read()
-
-    database[coll] = []
-
-    local_write(database)
+        local_write(database)
+        return True
+    except:
+        return False
 
 
 def get_document_by_id(coll, doc_id):
@@ -75,12 +69,16 @@ def get_document_by_id(coll, doc_id):
     :return:
     """
     database = local_read()
-
-    idx = 0
+    document = {}
+    
+    idx = -1
     for i, doc in enumerate(database[coll]):
-        if doc["_id"] == ObjectId(doc_id):
+        if doc["_id"] == doc_id:
             idx = i
-    document = database[coll][idx]
+            if idx != -1:
+                break
+    if idx != -1:
+        document = database[coll][idx]
     return document
 
 
@@ -88,16 +86,41 @@ def get_document_by_name(coll, doc_name):
     """
     Get document from local database
     :param coll:
-    :param doc_id:
+    :param doc_name:
     :return:
     """
     database = local_read()
-
-    idx = 0
+    document = {}
+    
+    idx = -1
     for i, doc in enumerate(database[coll]):
         if doc["name"] == doc_name:
             idx = i
-    document = database[coll][idx]
+            if idx != -1:
+                break
+    if idx != -1:
+        document = database[coll][idx]
+    return document
+
+
+def get_note(coll, doc_number):
+    """
+    Get document from local database
+    :param coll:
+    :param doc_number:
+    :return:
+    """
+    database = local_read()
+    document = {}
+    
+    idx = -1
+    for i, doc in enumerate(database[coll]):
+        if doc["number"] == doc_number:
+            idx = i
+            if idx != -1:
+                break
+    if idx != -1:
+        document = database[coll][idx]
     return document
 
 
@@ -105,16 +128,20 @@ def get_document_by_url(coll, doc_url):
     """
     Get document from local database
     :param coll:
-    :param doc_id:
+    :param doc_url:
     :return:
     """
     database = local_read()
+    document = {}
 
-    idx = 0
+    idx = -1
     for i, doc in enumerate(database[coll]):
         if doc["url"] == doc_url:
             idx = i
-    document = database[coll][idx]
+            if idx != -1:
+                break
+    if idx != -1:
+        document = database[coll][idx]
     return document
 
 
@@ -132,37 +159,145 @@ def get_collection(coll):
         return None
 
 
-def update_document(coll, doc_id, data_to_change):
+def update_document_by_id(coll, doc_id, data_to_change):
     """
-    Update document in local database
+    Update first document that meets the reqs' in local database
     :param coll:
     :param doc_id:
     :param data_to_change:
     """
-    database = local_read()
+    try:
+        database = local_read()
 
-    for doc in database[coll]:
-        if doc["_id"] == ObjectId(doc_id):
-            for key, value in data_to_change.items():
-                doc[key] = value
+        for doc in database[coll]:
+            if doc["_id"] == doc_id:
+                for key, value in data_to_change.items():
+                    doc[key] = value
+                break
 
-    local_write(database)
+        local_write(database)
+        return True
+    except:
+        return False
 
 
-def remove_document(coll, doc_id):
+def update_document_by_name(coll, doc_name, data_to_change):
+    """
+    Update first document that meets the reqs' in local database
+    :param coll:
+    :param doc_name:
+    :param data_to_change:
+    """
+    try:
+        database = local_read()
+
+        for doc in database[coll]:
+            if doc["name"] == doc_name:
+                for key, value in data_to_change.items():
+                    doc[key] = value
+                    break
+
+        local_write(database)
+        return True
+    except:
+        return False
+
+
+def update_note(coll, doc_number, data_to_change):
+    """
+    Update first note document that meets the reqs' in local database
+    :param coll:
+    :param doc_id:
+    :param data_to_change:
+    """
+    try:
+        database = local_read()
+
+        for doc in database[coll]:
+            if doc["number"] == doc_number:
+                for key, value in data_to_change.items():
+                    doc[key] = value
+                break
+
+        local_write(database)
+        return True
+    except:
+        return False
+
+
+def remove_document_by_id(coll, doc_id):
     """
     Remove document from local database
     :param coll:
     :param doc_id:
     """
-    database = local_read()
+    try:
+        database = local_read()
+        doc_ref = {}
+        for doc in database[coll]:
+            if doc['_id'] == doc_id:
+                doc_ref = doc
+                break
+        if doc_ref['_id'] != '':
+            if 'DELETED' not in database.keys():
+                database['DELETED'] = []
+            database['DELETED'].append({'ID': doc_ref['_id']})
+        database[coll].remove(doc_ref)
 
-    for i, doc in enumerate(database[coll]):
-        if doc["_id"] == ObjectId(doc_id):
-            database[i].remove(doc)
-            break
+        local_write(database)
+        return True
+    except:
+        return False
 
-    local_write(database)
+
+def remove_document_by_name(coll, doc_name):
+    """
+    Remove document from local database
+    :param coll:
+    :param doc_name:
+    """
+    try:
+        database = local_read()
+        doc_ref = {}
+        for doc in database[coll]:
+            if doc['name'] == doc_name:
+                doc_ref = doc
+                break
+        if doc_ref['_id'] != '':
+            if 'DELETED' not in database.keys():
+                database['DELETED'] = []
+            database['DELETED'].append({'ID': doc_ref['_id']})
+        database[coll].remove(doc_ref)
+
+        local_write(database)
+        return True
+    except:
+        return False
+
+
+def remove_note(coll, doc_number):
+    """
+    Remove document from local database
+    :param coll:
+    :param doc_number:
+    """
+    try:
+        database = local_read()
+        doc_ref = {}
+        for doc in database[coll]:
+            if doc['number'] == doc_number:
+                doc_ref = doc
+                break
+        if doc_ref['_id'] != '':
+            if 'DELETED' not in database.keys():
+                database['DELETED'] = []
+            database['DELETED'].append({'ID_note': doc_ref['_id']})
+        database[coll].remove(doc_ref)
+
+        local_write(database)
+        return True
+    except:
+        return False
 
 
 def remove_collection(coll):

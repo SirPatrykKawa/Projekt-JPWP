@@ -3,6 +3,7 @@ import mongoQueries as mq
 import datetime as dt
 import base64
 import json
+from bson import ObjectId
 
 class Date:
     def __init__(self, date:str):
@@ -32,7 +33,7 @@ def check_password(password) -> bool:
     with open("dbsettings.json", 'r') as fin:
         settings = json.load(fin)
 
-    if base64.b64decode(settings['password']) == password:
+    if settings['password'] == password:
         return True
     else:
         return False
@@ -50,6 +51,7 @@ def compare_dates(date1, date2) -> str:
     else:
         return 'equal'
 
+
 def synchronise() -> bool:
 
     try:
@@ -63,7 +65,7 @@ def synchronise() -> bool:
                 if document['_id'] == "":
                     del document['_id']
                     id = mq.add_new_rec(coll_name, document)
-                    document['_id'] = id
+                    document['_id'] = str(id)
                 
                 loc_date = document['last_modified']
                 rem_date = mq.get_single_rec(coll_name, document['_id'])['last_modified']
@@ -81,7 +83,7 @@ def synchronise() -> bool:
                 loc_date = lq.get_document_by_id(collection.name, document['_id'])
 
                 if compare_dates(rem_date, loc_date) == 'later':
-                    lq.update_document(collection.name, document['_id'], document)
+                    lq.update_document_by_id(collection.name, document['_id'], document)
     
         return True
     except:

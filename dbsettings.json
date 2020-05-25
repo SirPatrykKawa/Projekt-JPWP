@@ -4,6 +4,6 @@
   "server_ip": "127.0.0.1",
   "server_port": "27017",
   "database": "user_database",
-  "local_db_path": "t:/!_Coding_exchg/CryptoApp/",
+  "local_db_path": "t:\\!_Coding_exchg\\CryptoApp",
   "local_db_name": "local_db.json"
 }
