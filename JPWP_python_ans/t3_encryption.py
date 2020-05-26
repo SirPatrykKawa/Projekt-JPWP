@@ -72,17 +72,15 @@ def decrypt(encrypted_data, password):
 ###                                                      ###
 ############################################################
 if __name__ == "__main__":
-    passwd = hashlib.sha256("JpWp_4W50#3_3nCrYpT10n_T45k")
-    with open('./database.json', 'r') as fin:
+    passwd = "JpWp_4W50#3_3nCrYpT10n_T45k"
+    with open('./local.json', 'r') as fin:
         data = json.load(fin)
         fin.close()
 
-    enc = encrypt(data, passwd)
-    with open('./encrypted.bin', 'wb') as fout1:
-        fout1.writelines(enc)
-        fout1.close()
-
+    print(data)
+    print()
+    enc = encrypt(str(data), passwd)
+    print(enc)
+    print()
     dec = decrypt(enc, passwd)
-    with open('./decrypted.json', 'w') as fout2:
-        json.dump(dec, fout2, indent=2)
-        fout2.close()
+    print(dec)
